@@ -37,12 +37,38 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-// Page navigation
+// Page navigation smooth
 
 document.querySelectorAll('.nav__link').forEach(function (el) {
   el.addEventListener('click', function (e) {
-    console.log(e.target);
+    e.preventDefault();
+    const id = this.getAttribute('href');
+    console.log(id);
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
   });
+});
+
+// Tabbed component
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+tabsContainer.addEventListener('click', function (e) {
+  const clicked = e.target.closest('.operations__tab');
+  console.log(clicked);
+  // Guard clause
+  if (!clicked) return;
+  //Active tab
+  tabs.forEach(tab => tab.classList.remove('operations__tab--active'));
+  clicked.classList.add('operations__tab--active');
+
+  //Activate content area
+  tabsContent.forEach(tab =>
+    tab.classList.remove('operations__content--active')
+  );
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
 });
 //////////////////// Lecture //////////////////////
 // const allButtons = document.getElementsByTagName('button');
@@ -119,3 +145,14 @@ document.querySelectorAll('.nav__link').forEach(function (el) {
 // h1.onmouseenter = e => {
 //   console.log(e);
 // };
+
+// console.log(h1.querySelectorAll('.highlight'));
+// console.log(h1.childNodes);
+// console.log(h1.children);
+// console.log(h1.firstElementChild);
+// h1.firstElementChild.style.color = 'white';
+// console.log(h1.lastElementChild);
+// h1.lastElementChild.style.color = 'blue';
+
+// console.log(h1.parentElement);
+// console.log(h1.closest('.header') )
