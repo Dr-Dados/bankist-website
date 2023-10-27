@@ -13,6 +13,8 @@ const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 
+const lazyImgs = document.querySelectorAll('.lazy-img');
+
 btnScrollTo.addEventListener('click', function () {
   section1.scrollIntoView({ behavior: 'smooth' });
 });
@@ -93,11 +95,45 @@ navContainer.addEventListener('mouseover', handleHover.bind(0.5));
 navContainer.addEventListener('mouseout', handleHover.bind(1));
 
 // sticky navigation
+const header = document.querySelector('.header');
+const navHeight = navContainer.getBoundingClientRect().height;
+console.log(navHeight);
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) navContainer.classList.add('sticky');
+  else navContainer.classList.remove('sticky');
+};
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(header);
+
 // const initialCoords = section1.getBoundingClientRect();
 // window.addEventListener('scroll', function (e) {
 //   if (window.scrollY >= 0) navContainer.classList.add('sticky');
 //   else navContainer.classList.remove('sticky');
 // });
+
+//Reveal sections
+const allSections = document.querySelectorAll('.section');
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  console.log(entry);
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+};
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+allSections.forEach(function (section) {
+  section.classList.add('section--hidden');
+  sectionObserver.observe(section);
+});
 //////////////////// Lecture //////////////////////
 // const allButtons = document.getElementsByTagName('button');
 // const header = document.querySelector('.header');
@@ -194,18 +230,64 @@ navContainer.addEventListener('mouseout', handleHover.bind(1));
 // const observer = new IntersectionObserver(obsCallback, obsOptions);
 // observer.observe(section1);
 
-const header = document.querySelector('.header');
-const navHeight = navContainer.getBoundingClientRect().height;
-console.log(navHeight);
-const stickyNav = function (entries) {
-  const [entry] = entries;
-  console.log(entry);
-  if (!entry.isIntersecting) navContainer.classList.add('sticky');
-  else navContainer.classList.remove('sticky');
-};
-const headerObserver = new IntersectionObserver(stickyNav, {
-  root: null,
-  threshold: 0,
-  rootMargin: `-${navHeight}px`,
-});
-headerObserver.observe(header);
+// function parseInt(s) {
+//   let result = 0;
+//   const wordToNumber = {
+//     zero: 0,
+//     one: 1,
+//     two: 2,
+//     three: 3,
+//     four: 4,
+//     five: 5,
+//     six: 6,
+//     seven: 7,
+//     eight: 8,
+//     nine: 9,
+//     ten: 10,
+//     eleven: 11,
+//     twelve: 12,
+//     thirteen: 13,
+//     fourteen: 14,
+//     fifteen: 15,
+//     sixteen: 16,
+//     seventeen: 17,
+//     eighteen: 18,
+//     nineteen: 19,
+//     twenty: 20,
+//     thirty: 30,
+//     forty: 40,
+//     fifty: 50,
+//     sixty: 60,
+//     seventy: 70,
+//     eighty: 80,
+//     ninety: 90,
+//     hundred: 100,
+//     thousand: 1000,
+//     million: 1000000,
+//   };
+//   const words = s.split(/[ -]/);
+//   for (let word of words) {
+//     for (let [key, value] of Object.entries(wordToNumber)) {
+//       if (word === 'hundred') {
+//         result *= 100;
+//         break;
+//       }
+//       if (word === 'thousand') {
+//         result *= 1000;
+//         break;
+//       }
+
+//       if (word === key) {
+//         result += value;
+//         break;
+//       }
+//     }
+//   }
+//   console.log(result);
+// }
+
+// // parseInt('one');
+// // parseInt('twenty');
+// parseInt('Two hundred forty-six');
+// // parseInt('two hundred and three');
+// // parseInt('seven hundred eighty-three thousand nine hundred and nineteen');
