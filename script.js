@@ -121,9 +121,9 @@ const allSections = document.querySelectorAll('.section');
 
 const revealSection = function (entries, observer) {
   const [entry] = entries;
-  console.log(entry);
   if (!entry.isIntersecting) return;
   entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
 };
 const sectionObserver = new IntersectionObserver(revealSection, {
   root: null,
@@ -133,6 +133,23 @@ const sectionObserver = new IntersectionObserver(revealSection, {
 allSections.forEach(function (section) {
   section.classList.add('section--hidden');
   sectionObserver.observe(section);
+});
+
+// lazy images
+const revealImg = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('lazy-img');
+  console.log(entry.target);
+  entry.target.src = entry.target.dataset.src;
+  console.log(entry.target.src);
+};
+const imgObserver = new IntersectionObserver(revealImg, {
+  root: null,
+  threshold: 0.1,
+});
+lazyImgs.forEach(el => {
+  imgObserver.observe(el);
 });
 //////////////////// Lecture //////////////////////
 // const allButtons = document.getElementsByTagName('button');
